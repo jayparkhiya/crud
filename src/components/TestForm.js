@@ -20,7 +20,7 @@ export default function TestForm() {
     if (
       id.length < 3 ||
       name.length < 2 ||
-      email.length < 25 ||
+      email.length < 15 ||
       CarModel.length < 3
     ) {
       setIdErr(true);
