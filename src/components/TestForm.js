@@ -5,40 +5,67 @@ export default function TestForm() {
   const [data, setdata] = useState({ CarModel: "Volvo" });
   const [arr, setarr] = useState([]);
   const [status, setStatus] = useState(false);
+  const [idErr, setIdErr] = useState(false);
 
   const handleonchange = (e, fieldName) => {
     const value = e.target.value;
+
     setdata((state) => {
       return { ...state, [fieldName]: value };
     });
   };
 
   const onclickbutton = () => {
-    setarr((state) => [...state, data]);
+    const { id, name, email, CarModel } = data;
+    if (
+      id.length < 3 ||
+      name.length < 2 ||
+      email.length < 25 ||
+      CarModel.length < 3
+    ) {
+      setIdErr(true);
+      return;
+    } else {
+      setarr((state) => [...state, data]);
+      setIdErr(false);
+    }
+    if (data.id.length < 3);
+  };
+  const handledelete = (id) => {
+    let newarr = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].id !== id) {
+        newarr.push(arr[i]);
+      }
+    }
+    setarr(newarr);
   };
   return (
     <div className="container">
       {status ? (
         <div>
-          <label htmlFor="Id">ID</label>
+          <label>ID</label>
           <input
             type="text"
             onChange={(e) => handleonchange(e, "id")}
             placeholder="Enter id"
-          />
-          <label htmlFor="Name">Name</label>
+          />{" "}
+          {idErr ? <span>Not Valid ID</span> : ""}
+          <label>Name</label>
           <input
             type="text"
             onChange={(e) => handleonchange(e, "name")}
             placeholder="Enter name"
-          />
-          <label htmlFor="email">Email</label>
+          />{" "}
+          {idErr ? <span>Not Valid Name</span> : ""}
+          <label>Email</label>
           <input
             type="text"
             onChange={(e) => handleonchange(e, "email")}
             placeholder="Enter Email"
-          />
-          <label for="cars">Choose a car:</label>
+          />{" "}
+          {idErr ? <span>Not Valid Email</span> : ""}
+          <label>Choose a car:</label>
           <select
             name="cars"
             id="cars"
@@ -54,23 +81,33 @@ export default function TestForm() {
           </button>
           <br />
           <table>
-            <tr>
-              <td>Id</td>
-              <td>Name</td>
-              <td>Email</td>
-              <td>CarModel</td>
-            </tr>
-            {arr.map((data) => {
-              return (
-                <tr>
-                  <td>{data.id}</td>
-                  <td>{data.name}</td>
-                  <td>{data.email}</td>
-                  <td>{data.CarModel}</td>
-                  <button type="delete">Delete</button>
-                </tr>
-              );
-            })}
+            <tbody>
+              <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Email</td>
+                <td>CarModel</td>
+              </tr>
+              {arr.map((data) => {
+                return (
+                  <tr>
+                    <td>{data.id}</td>
+                    <td>{data.name}</td>
+                    <td>{data.email}</td>
+                    <td>{data.CarModel}</td>
+                    <td>
+                      {" "}
+                      <button
+                        type="delete"
+                        onClick={() => handledelete(data.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </div>
       ) : null}
